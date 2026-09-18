@@ -12,6 +12,15 @@ This repository is solely maintained by Docker, Inc.
 
 ## Usage:
 
+From this fork ([`install.sh`](https://github.com/jw2702/docker-install/blob/master/install.sh)),
+which routes the apt repository through apt-cacher-ng instead of bypassing it.
+Requires apt to be configured to use an apt-cacher-ng proxy:
+```shell
+curl -fsSL https://raw.githubusercontent.com/jw2702/docker-install/master/install.sh -o install-docker.sh
+sh install-docker.sh
+rm install-docker.sh
+```
+
 From `https://get.docker.com`:
 ```shell
 curl -fsSL https://get.docker.com -o get-docker.sh
