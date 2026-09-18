@@ -593,7 +593,16 @@ do_install() {
 			if [ "$lsb_dist" = "raspbian" ] && [ "$dist_version" = "trixie" ]; then
 				apt_repo_lsb_dist="debian"
 			fi
-			apt_repo="deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] $DOWNLOAD_URL/linux/$apt_repo_lsb_dist $dist_version $CHANNEL"
+			# Use apt-cacher-ng's HTTPS passthrough syntax so the repo is not bypassed by the cache.
+			case "$DOWNLOAD_URL" in
+				https://*)
+					apt_download_url="http://HTTPS///${DOWNLOAD_URL#https://}"
+					;;
+				*)
+					apt_download_url="$DOWNLOAD_URL"
+					;;
+			esac
+			apt_repo="deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] $apt_download_url/linux/$apt_repo_lsb_dist $dist_version $CHANNEL"
 			(
 				if ! is_dry_run; then
 					set -x
